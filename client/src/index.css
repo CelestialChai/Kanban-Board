@@ -13,13 +13,13 @@
 }
 
 /* webkit solution */
-::-webkit-input-placeholder { 
-  text-align:right; 
+::-webkit-input-placeholder {
+  text-align:right;
 }
 
 /* mozilla solution */
-input:-moz-placeholder { 
-  text-align:right; 
+input:-moz-placeholder {
+  text-align:right;
 }
 
 a {
@@ -140,7 +140,7 @@ tbody tr:nth-child(odd) {
   text-align: center;
   font-weight: 500;
   width: 33%;
-  height: 90vh; 
+  height: 90vh;
   border: 1px solid rgba(0, 0, 0, 0.2);
   margin: 5px;
   padding: 5px;
@@ -181,7 +181,7 @@ tbody tr:nth-child(odd) {
 
 
 .form {
-  width: 60%;
+  width: 90%;
   height: 80%;
   background-color: #b864c4;
   margin: auto;
@@ -197,7 +197,7 @@ tbody tr:nth-child(odd) {
 
 .form > input {
   width: 200px;
-  
+
 }
 
 .form > label {

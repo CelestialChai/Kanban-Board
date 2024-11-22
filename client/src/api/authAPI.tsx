@@ -1,8 +1,10 @@
 import { UserLogin } from "../interfaces/UserLogin";
 
-const login = async (userInfo: UserLogin): Promise<{ token: string }> => {
+export const login = async (userInfo: UserLogin): Promise<{ token: string }> => {
   try {
-    const response = await fetch('/api/auth/login', {
+    console.log('Request payload:', userInfo);
+
+    const response = await fetch('/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -10,8 +12,11 @@ const login = async (userInfo: UserLogin): Promise<{ token: string }> => {
       body: JSON.stringify(userInfo),
     });
 
+    console.log('Response status:', response.status);
+
     if (!response.ok) {
       const error = await response.json();
+      console.error('Error from server:', error);
       throw new Error(error.message || 'Failed to login');
     }
 
@@ -21,5 +26,3 @@ const login = async (userInfo: UserLogin): Promise<{ token: string }> => {
     throw err;
   }
 };
-
-export { login }

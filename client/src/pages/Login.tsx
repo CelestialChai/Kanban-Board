@@ -1,77 +1,41 @@
-import { useState, FormEvent, ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import Auth from '../utils/auth';
-import { login } from "../api/authAPI";
+import { useState } from 'react';
+import { login } from '../api/authAPI';
+import '../index.css';
 
 const Login = () => {
-  const [loginData, setLoginData] = useState({
-    username: '',
-    password: ''
-  });
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setLoginData({
-      ...loginData,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-
-    if (!loginData.username || !loginData.password) {
-      setError("Both fields are required.");
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const data = await login(loginData);
-      Auth.login(data.token);
-      navigate('/');
-    } catch (err) {
-      setError("Invalid username or password.");
-      console.error("Failed to login", err);
-    } finally {
-      setIsLoading(false);
+      const tokenResponse = await login({ username, password });
+      localStorage.setItem('jwt', tokenResponse.token);
+      console.log('Login successful:', tokenResponse);
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
   return (
-    <div className="container">
-      <form className="form" onSubmit={handleSubmit}>
-        <h1>Login</h1>
-
-        {error && <p className="error">{error}</p>} {/* Display error message */}
-
-        <label>Username</label>
+    <div>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="username"
-          value={loginData.username || ''}
-          onChange={handleChange}
-          disabled={isLoading}
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-
-        <label>Password</label>
         <input
           type="password"
-          name="password"
-          value={loginData.password || ''}
-          onChange={handleChange}
-          disabled={isLoading}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Submit Form"}
-        </button>
+        <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
